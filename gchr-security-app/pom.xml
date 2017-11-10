@@ -10,6 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gchr-security-app</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.gchr</groupId>
+            <artifactId>gchr-security-core</artifactId>
+            <version>${gchr.security.version}</version>
+        </dependency>
+    </dependencies>
 
 
 </project>

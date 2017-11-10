@@ -11,5 +11,17 @@
 
     <artifactId>gchr-security-brower</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.gchr</groupId>
+            <artifactId>gchr-security-core</artifactId>
+            <version>${gchr.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session</artifactId>
+        </dependency>
+    </dependencies>
+
 
 </project>
