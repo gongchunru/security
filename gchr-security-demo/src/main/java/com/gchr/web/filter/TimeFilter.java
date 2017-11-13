@@ -11,7 +11,7 @@ import java.util.Date;
  * Date：2017/11/12.
  * Time：17:18
  */
-//@Component
+@Component
 public class TimeFilter implements Filter {
 
 
