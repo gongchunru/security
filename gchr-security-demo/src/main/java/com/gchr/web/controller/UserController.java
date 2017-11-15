@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.gchr.dto.User;
 import com.gchr.dto.UserQueryCondition;
 import com.gchr.exception.UserNotExistException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -23,9 +26,11 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user")
+@Api("userController相关api")
 public class UserController {
 
     @PostMapping
+    @ApiOperation("创建")
     public User create(@Valid @RequestBody User user, BindingResult errors){
         if (errors.hasErrors()){
             errors.getAllErrors().stream().forEach(error -> System.out.println(error.getDefaultMessage()));
