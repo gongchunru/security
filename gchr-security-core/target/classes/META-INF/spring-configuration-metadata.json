@@ -1,0 +1,22 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.gchr.security.core.properties.SecurityProperties",
+      "name": "gchr.security",
+      "type": "com.gchr.security.core.properties.SecurityProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.gchr.security.core.properties.SecurityProperties",
+      "name": "gchr.security.browser",
+      "type": "com.gchr.security.core.properties.BrowserProperties"
+    },
+    {
+      "sourceType": "com.gchr.security.core.properties.SecurityProperties",
+      "name": "gchr.security.code",
+      "type": "com.gchr.security.core.properties.ValidateCodeProperties"
+    }
+  ]
+}
