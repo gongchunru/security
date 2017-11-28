@@ -1,6 +1,8 @@
-package com.gchr.security.core.validate.code;
+package com.gchr.security.core.validate.code.sms;
 
 import com.gchr.security.core.properties.SecurityProperties;
+import com.gchr.security.core.validate.code.ValidateCode;
+import com.gchr.security.core.validate.code.ValidateCodeGenerator;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +13,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * Date：2017/11/19.
  * Time：0:16
  */
-@Component("smsCodeGenerator")
+@Component("smsValidateCodeGenerator")
 public class SmsCodeGenerator implements ValidateCodeGenerator {
     @Autowired
     private SecurityProperties securityProperties;

@@ -1,6 +1,7 @@
 package com.gchr.security.core.validate.code;
 
 import com.gchr.security.core.properties.SecurityProperties;
+import com.gchr.security.core.validate.code.image.ImageCodeGenerator;
 import com.gchr.security.core.validate.code.sms.DefaultSmsCodeSender;
 import com.gchr.security.core.validate.code.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;

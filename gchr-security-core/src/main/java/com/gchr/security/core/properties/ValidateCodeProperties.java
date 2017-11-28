@@ -1,7 +1,5 @@
 package com.gchr.security.core.properties;
 
-import com.gchr.security.core.validate.code.ImageCode;
-
 /**
  * @author gongchunru
  * Date：2017/11/18.
