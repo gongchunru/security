@@ -58,6 +58,7 @@ public class BrowserSecurityConfig  extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+
         ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
         validateCodeFilter.setAuthenticationFailureHandler(GchrAuthenctiationFailureHandler);
         validateCodeFilter.setSecurityProperties(securityProperties);
