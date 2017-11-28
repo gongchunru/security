@@ -2,14 +2,13 @@ package com.gchr.security.browser.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gchr.security.browser.support.SimpleResponse;
-import com.gchr.security.core.properties.LoginType;
+import com.gchr.security.core.properties.LoginResponseType;
 import com.gchr.security.core.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +36,7 @@ public class GchrAuthenctiationFailureHandler extends SimpleUrlAuthenticationFai
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         logger.info("登录失败");
-        if (LoginType.JSON.equals(securityProperties.getBrowser().getLoginType())){
+        if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getLoginResponseType())){
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));

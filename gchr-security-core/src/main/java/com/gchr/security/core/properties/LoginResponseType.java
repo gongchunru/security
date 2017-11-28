@@ -5,7 +5,7 @@ package com.gchr.security.core.properties;
  * Date：2017/11/17.
  * Time：0:43
  */
-public enum LoginType {
+public enum LoginResponseType {
     REDIRECT,
     JSON
 }

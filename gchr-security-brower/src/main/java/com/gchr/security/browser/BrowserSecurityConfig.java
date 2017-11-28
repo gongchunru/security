@@ -1,7 +1,11 @@
 package com.gchr.security.browser;
 
+import com.gchr.security.core.authentication.AbstractChannelSecurityConfig;
+import com.gchr.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.gchr.security.core.properties.SecurityConstants;
 import com.gchr.security.core.properties.SecurityProperties;
 import com.gchr.security.core.validate.code.ValidateCodeFilter;
+import com.gchr.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,16 +28,11 @@ import javax.sql.DataSource;
  * Time：17:40
  */
 @Configuration
-public class BrowserSecurityConfig  extends WebSecurityConfigurerAdapter{
+public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
     @Autowired
     private SecurityProperties securityProperties;
 
-    @Autowired
-    private AuthenticationSuccessHandler GchrAuthenticationSuccessHandler;
-
-    @Autowired
-    private AuthenticationFailureHandler GchrAuthenctiationFailureHandler;
 
     @Autowired
     private DataSource dataSource;
@@ -41,6 +40,12 @@ public class BrowserSecurityConfig  extends WebSecurityConfigurerAdapter{
     //记住用户，然后登录
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
+
+    @Autowired
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -58,18 +63,11 @@ public class BrowserSecurityConfig  extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        applyPasswordAuthenticationConfig(http);
 
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setAuthenticationFailureHandler(GchrAuthenctiationFailureHandler);
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.afterPropertiesSet();
-
-        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-                .loginPage("/authentication/require")
-                .loginProcessingUrl("/authentication/form")
-                .successHandler(GchrAuthenticationSuccessHandler)
-                .failureHandler(GchrAuthenctiationFailureHandler)
+        http.apply(validateCodeSecurityConfig)
+                .and()
+                .apply(smsCodeAuthenticationSecurityConfig)
                 .and()
                 .rememberMe()
                 .tokenRepository(persistentTokenRepository())
@@ -77,8 +75,11 @@ public class BrowserSecurityConfig  extends WebSecurityConfigurerAdapter{
                 .userDetailsService(userDetailsService)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/authentication/require",
+                .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+                        SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE,
                         securityProperties.getBrowser().getLoginPage(),
+                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX+"/*",
+                        securityProperties.getBrowser().getSignUpUrl();
                         "/code/image").permitAll()
                 .anyRequest()
                 .authenticated()
