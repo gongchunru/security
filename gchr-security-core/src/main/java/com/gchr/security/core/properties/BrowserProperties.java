@@ -6,6 +6,9 @@ package com.gchr.security.core.properties;
  * Time：18:06
  */
 public class BrowserProperties {
+
+    private String signUpUrl = "/signUp.html";
+
     private String loginPage = SecurityConstants.DEFAULT_LOGIN_PAGE_URL;
 
     private LoginResponseType loginResponseType = LoginResponseType.JSON;
@@ -26,6 +29,14 @@ public class BrowserProperties {
 
     public void setLoginResponseType(LoginResponseType loginResponseType) {
         this.loginResponseType = loginResponseType;
+    }
+
+    public String getSignUpUrl() {
+        return signUpUrl;
+    }
+
+    public void setSignUpUrl(String signUpUrl) {
+        this.signUpUrl = signUpUrl;
     }
 
     public int getRememberMeSeconds() {
