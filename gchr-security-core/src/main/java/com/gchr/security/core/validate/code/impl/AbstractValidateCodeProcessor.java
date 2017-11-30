@@ -2,6 +2,8 @@ package com.gchr.security.core.validate.code.impl;
 
 import com.gchr.security.core.validate.code.*;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
@@ -17,6 +19,8 @@ import java.util.Map;
  * Time：10:57
  */
 public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> implements ValidateCodeProcessor {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * 操作session 的工具类
@@ -40,8 +44,10 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
      */
     @Override
     public void create(ServletWebRequest request) throws Exception {
+        logger.info("进入创建验证码的方法 create");
         C validateCode = generate(request);
-
+        save(request,validateCode);
+        send(request,validateCode);
     }
 
     /**
@@ -52,6 +58,7 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
     @SuppressWarnings("unchecked")
     private C generate(ServletWebRequest request){
         String type = getValidateCodeType(request).toString().toLowerCase();
+        logger.info("generate 开始生成验证码: type:{}",type);
         String generatorName = type + ValidateCodeGenerator.class.getSimpleName();
         ValidateCodeGenerator validateCodeGenerator = validateCodeGenerators.get(generatorName);
         if (validateCodeGenerator == null) {
@@ -66,6 +73,7 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
      * @param validateCode
      */
     private void save(ServletWebRequest request, C validateCode){
+        logger.info("保存验证码：");
         sessionStrategy.setAttribute(request, getSessionKey(request), validateCode);
     }
 
@@ -75,7 +83,9 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
      * @return
      */
     private String getSessionKey(ServletWebRequest request){
-        return SESSION_KEY_PREFIX + getValidateCodeType(request).toString().toUpperCase();
+        String sessionKey = SESSION_KEY_PREFIX + getValidateCodeType(request).toString().toUpperCase();
+        logger.info("构建验证码时放入session 的key :{}",sessionKey);
+        return sessionKey;
     }
 
     @SuppressWarnings("unchecked")
@@ -85,6 +95,7 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
         String sessionKey = getSessionKey(request);
 
         C codeInSession = (C) sessionStrategy.getAttribute(request, sessionKey);
+        logger.info("开始构校验证码:codeInSession:{}",codeInSession);
         String codeInRequest;
         try {
             codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(),
